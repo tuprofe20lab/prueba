@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>TuProfe20 Lab | Ejercicio 8 - Inecuaciones con fracciones</title>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:'Nunito',system-ui,sans-serif;background:linear-gradient(135deg,#0f172a 0%,#312e81 45%,#831843 100%);color:#0f172a;user-select:none}
+button,select{font-family:inherit}
+#ink{position:fixed;inset:0;z-index:70;pointer-events:none;touch-action:none}
+.drawactive #ink{pointer-events:auto;cursor:crosshair}
+.hidden{display:none!important}
+.app{width:100vw;height:100dvh;position:relative;overflow:hidden}
+.floaters{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.floaters span{position:absolute;display:block;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.12);animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(105vh) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(-15vh) rotate(360deg);opacity:0}}
+.home,.lab{position:absolute;inset:0;z-index:1}
+.home{padding:18px 20px;display:flex;flex-direction:column;align-items:center;overflow:auto}
+.headerbar{width:min(96%,1400px);display:flex;align-items:center;justify-content:space-between;margin:0 auto 18px auto}
+.brandpill{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:18px;border:2px solid rgba(250,204,21,.5);background:rgba(255,255,255,.12);backdrop-filter:blur(10px);color:#fde047;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.soundbtn,.miniBtn{border:none;background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.26);padding:10px 14px;border-radius:18px;font-weight:900;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 10px 24px rgba(0,0,0,.18);transition:.2s transform,.2s background}
+.soundbtn:hover,.miniBtn:hover,.card:hover{transform:translateY(-2px)}
+.hero{width:min(96%,1400px);text-align:center;color:#fff;margin-top:10px}
+.hero h1{margin:0;font-size:clamp(40px,6vw,86px);line-height:1;letter-spacing:-.03em;font-weight:900;text-transform:uppercase;text-shadow:0 6px 0 rgba(0,0,0,.28)}
+.hero h1 .accent{color:#fde047;text-decoration:underline wavy #22d3ee}
+.hero p{font-size:clamp(16px,2vw,28px);font-weight:800;color:#e9d5ff;margin:14px auto 20px;max-width:900px}
+.grid{width:min(96%,1400px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;padding-bottom:20px}
+.card{position:relative;overflow:hidden;min-height:188px;text-align:left;border:none;border-radius:28px;padding:18px 18px 16px;background:linear-gradient(135deg,#1d4ed8,#06b6d4);color:#fff;cursor:pointer;box-shadow:0 20px 35px rgba(0,0,0,.28);transition:.25s transform,.25s box-shadow}
+.card:nth-child(4n+2){background:linear-gradient(135deg,#7c3aed,#ec4899)}
+.card:nth-child(4n+3){background:linear-gradient(135deg,#f97316,#f43f5e)}
+.card:nth-child(4n+4){background:linear-gradient(135deg,#059669,#14b8a6)}
+.badge{display:inline-block;padding:5px 10px;border-radius:10px;background:rgba(0,0,0,.24);font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.card .mathPreview{margin:14px 0;padding:14px;border-radius:16px;background:rgba(255,255,255,.95);color:#0f172a;min-height:74px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55)}
+.card .subtitle{font-size:15px;font-weight:900;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,.35)}
+.lab{padding:14px;display:flex;flex-direction:column}
+.labTop{position:relative;z-index:2;width:min(96%,1400px);margin:0 auto 10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.navchips{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:auto;padding:8px 10px;border-radius:20px;background:rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.18);backdrop-filter:blur(10px)}
+.exchip{flex:0 0 auto;width:44px;height:44px;border:none;border-radius:14px;background:transparent;color:#fff;font-weight:900;font-size:16px;cursor:pointer;transition:.2s}
+.exchip.active{background:#facc15;color:#111827;transform:scale(1.08);box-shadow:0 0 20px rgba(250,204,21,.6)}
+.board{position:relative;z-index:2;width:min(96%,1400px);margin:0 auto;flex:1;min-height:0;background:#fff;border:8px solid #f8fafc;border-radius:38px;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column}
+.boardHead{background:#0f172a;color:#fff;border-bottom:4px solid #06b6d4;padding:12px 18px 14px;box-shadow:0 8px 18px rgba(0,0,0,.2)}
+.boardMeta{display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:1120px;margin:0 auto 8px auto}
+.topBadge{display:inline-block;padding:6px 10px;border-radius:10px;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.blockTag{background:#06b6d4;color:#082f49}
+.typeTag{background:rgba(255,255,255,.14);color:#fde68a}
+.enunciado{max-width:1120px;margin:0 auto;text-align:center;font-size:clamp(20px,2vw,30px);font-weight:800;line-height:1.35}
+.boardBody{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;background:#f8fafc}
+.half{min-width:0;min-height:0;display:flex;flex-direction:column;position:relative}
+.half.left{border-right:2px solid rgba(148,163,184,.35)}
+.panelTitle{padding:14px 18px;border-bottom:2px solid rgba(203,213,225,.7);background:linear-gradient(90deg,#ffffff,#f1f5f9);color:#0f172a;font-size:22px;font-weight:900;display:flex;justify-content:space-between;align-items:center}
+.panelTitle small{font-size:13px;color:#475569}
+.stepsArea{flex:1;min-height:0;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:14px;background:radial-gradient(circle at center,rgba(15,23,42,.03) 2px,transparent 2px);background-size:22px 22px}
+.step{background:#fff;border:2px solid #e2e8f0;border-radius:22px;padding:14px 16px;box-shadow:0 10px 22px rgba(15,23,42,.08);animation:slideIn .28s ease-out both}
+.step.current{border-color:#facc15;background:#fffbeb}
+@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.stepWhy{display:flex;align-items:center;gap:10px;margin-bottom:8px;color:#475569;font-size:15px;font-weight:800}
+.stepWhy b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#2563eb;color:#fff;flex:0 0 auto}
+.mathLine{font-size:clamp(18px,1.5vw,28px);color:#0f172a;overflow-x:auto;overflow-y:hidden;padding-bottom:3px}
+.emptyBox{flex:1;display:grid;place-items:center;text-align:center;color:#64748b;padding:20px}
+.emptyBox strong{font-size:30px;color:#334155}
+.graphWrap{flex:1;min-height:0;padding:14px 18px 8px;display:flex;flex-direction:column}
+.graphTitle{text-align:center;color:#4338ca;font-size:15px;font-weight:900;margin-bottom:6px}
+.graphBox{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff,#f8fafc);border:2px solid #e2e8f0;border-radius:24px;padding:10px;box-shadow:inset 0 0 0 1px #fff}
+.graphBox svg{width:100%;height:100%;max-height:460px;overflow:visible}
+.graphTip{margin-top:10px;padding:10px 14px;border-radius:16px;border:2px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;font-size:14px;font-weight:800}
+.controls{padding:10px 14px;border-top:2px solid rgba(203,213,225,.7);background:#fff;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ctrl{border:none;border-radius:14px;padding:10px 14px;font-size:14px;font-weight:900;cursor:pointer;transition:.18s;box-shadow:0 4px 0 rgba(15,23,42,.12)}
+.ctrl:active{transform:translateY(2px);box-shadow:none}
+.ctrl.main{background:#2563eb;color:#fff}
+.ctrl.alt{background:#fff;color:#334155;border:2px solid #cbd5e1}
+.ctrl.gold{background:#facc15;color:#713f12}
+.progressShell{width:180px;height:13px;background:#dbeafe;border-radius:999px;overflow:hidden}
+.progressBar{height:100%;background:linear-gradient(90deg,#22d3ee,#2563eb);width:0%;transition:width .25s}
+.toolbar{position:fixed;right:18px;bottom:78px;z-index:90;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:min(700px,78vw);padding:8px;border-radius:18px;background:rgba(255,255,255,.94);border:2px solid #cbd5e1;box-shadow:0 12px 26px rgba(15,23,42,.22);backdrop-filter:blur(10px)}
+.toolbar .tbtn{border:none;border-radius:12px;padding:7px 10px;background:#fff;color:#334155;font-weight:900;cursor:pointer;border:2px solid #cbd5e1}
+.toolbar .tbtn.active{background:#2563eb;color:#fff;border-color:#1d4ed8}
+.palette{display:flex;align-items:center;gap:5px}
+.swatch{width:28px;height:28px;border-radius:50%;border:3px solid #fff;outline:1px solid #94a3b8;cursor:pointer}
+.swatch.sel{outline:3px solid #1e3a8a}
+@media (max-width:1150px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))} .hero h1{font-size:40px} .boardBody{grid-template-columns:1fr} .half.left{border-right:none;border-bottom:2px solid rgba(148,163,184,.35)} .toolbar{right:8px;left:8px;max-width:none;justify-content:center}}
+@media (max-width:640px){.grid{grid-template-columns:1fr} .lab{padding:8px} .board{border-width:5px;border-radius:22px} .exchip{width:38px;height:38px} .enunciado{font-size:18px} .panelTitle{font-size:18px}}
+
+.home{display:none!important}.lab{display:flex!important}.labTop{width:min(98%,1450px);margin-bottom:8px}.board{width:min(98%,1450px);border-width:6px}.labTop .brandpill{font-size:19px}.boardHead{padding:14px 22px}.enunciado{font-size:clamp(20px,2.4vw,32px)}#enunciadoEq{margin-top:9px;font-size:1.48em;color:#fde047}.panelTitle{font-size:clamp(17px,1.65vw,23px)}.stepWhy{font-size:clamp(14px,1.2vw,18px)}.mathLine{font-size:clamp(21px,2.1vw,34px);padding:7px 0}.graphBox{position:relative;overflow:hidden}.graphBox svg{max-height:none}.graphTitle{font-size:17px}.graphTip{font-size:15px}.ctrl{font-size:15px}.controls{justify-content:space-between}.step{padding:16px 20px}.step.current{border-color:#7c3aed;background:#faf5ff}.numTag{color:#fde047;font-weight:900}.stage{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:9px 15px;font-weight:900}.graphHint{font-size:13px;color:#475569;margin:9px auto;text-align:center}.mathLine .katex-display{margin:.3em 0}.notice{background:#f0fdf4;border:2px solid #86efac;color:#166534;border-radius:14px;padding:12px;font-weight:900;text-align:center}.emptyBox strong{font-size:clamp(21px,2vw,30px)}
+@media(max-width:900px){.boardBody{grid-template-columns:1fr;overflow:auto}.half.left{min-height:240px}.half.right{min-height:290px}.board{overflow:auto}.stepsArea{max-height:35vh}.toolbar{bottom:6px}.controls{padding-bottom:72px}.graphBox{min-height:220px}}
+</style></head><body>
+<canvas id="ink"></canvas><div class="app"><div class="floaters" id="floaters"></div>
+<section class="lab" id="labView"><div class="labTop"><span class="brandpill">🚀 TuProfe20 Lab · Aula 23</span><span class="stage">EJERCICIO 8 · FRACCIONES</span><button class="miniBtn" id="toggleMute">🔊 Sonido</button></div>
+<div class="board"><div class="boardHead"><div class="boardMeta"><span class="topBadge blockTag">BLOQUE 02 · FRACCIONES</span><span class="topBadge typeTag">DESARROLLA Y REPRESENTA</span></div><div class="enunciado"><div>Utiliza el mínimo común múltiplo de los denominadores.</div><div id="enunciadoEq"></div></div></div>
+<div class="boardBody"><div class="half left"><div class="panelTitle">✍️ Resolución paso a paso <small id="stepMeta">0 de 5 pasos</small></div><div class="stepsArea" id="stepsArea"></div></div>
+<div class="half right"><div class="panelTitle">📏 Recta numérica <small>Conjunto solución</small></div><div class="graphWrap"><div class="graphTitle" id="graphTitle">Observa cómo se construye el esquema.</div><div class="graphBox" id="graphBox"></div><div class="graphHint">● Punto cerrado = extremo incluido · → Valores mayores</div><div class="graphTip" id="graphTip"></div></div></div></div>
+<div class="controls"><div class="group"><button class="ctrl alt" id="prevStep">↶ Paso anterior</button><button class="ctrl main" id="nextStep">Siguiente paso ▶</button><button class="ctrl gold" id="solveAll">Resolver todo ★</button><button class="ctrl alt" id="restart">↻ Reiniciar</button></div><div class="group"><div class="progressShell"><div class="progressBar" id="progressBar"></div></div><strong id="progressTxt">0 / 5</strong></div></div></div></section></div>
+<nav class="toolbar" aria-label="Pizarra activa">
+  <button class="tbtn active" data-tool="select">☝ Selector</button>
+  <button class="tbtn" data-tool="pen" title="Mantén Shift presionado al comenzar a dibujar para trazar una línea recta">✏ Lápiz · Shift = recto</button>
+  <button class="tbtn" data-tool="marker">🖍 Resaltador</button>
+  <button class="tbtn" data-tool="line">📐 Línea</button>
+  <button class="tbtn" data-tool="erase">◻ Borrador</button>
+  <div class="palette">
+    <button class="swatch sel" data-color="#ef4444" style="background:#ef4444" title="Rojo"></button>
+    <button class="swatch" data-color="#2563eb" style="background:#2563eb" title="Azul"></button>
+    <button class="swatch" data-color="#16a34a" style="background:#16a34a" title="Verde"></button>
+    <button class="swatch" data-color="#facc15" style="background:#facc15" title="Amarillo"></button>
+    <button class="swatch" data-color="#9333ea" style="background:#9333ea" title="Morado"></button>
+  </div>
+  <button class="tbtn" id="undoInk">↩</button>
+  <button class="tbtn" id="clearInk">🗑</button>
+</nav>
+<script>
+const $ = id=>document.getElementById(id);
+let revealed=0;
+const STEPS=[
+{why:'Identificamos los denominadores 4 y 2; calculamos su mínimo común múltiplo.',math:'\\operatorname{m.c.m.}(4,2)=4',phase:0},
+{why:'Multiplicamos AMBOS miembros por 4. Como 4 es positivo, el signo ≥ se mantiene.',math:'4\\left(\\frac{x}{4}+\\frac{x}{2}\\right)\\ge 4(6)',phase:0},
+{why:'Eliminamos denominadores y obtenemos una inequación sin fracciones.',math:'x+2x\\ge 24',phase:0},
+{why:'Reducimos términos semejantes y dividimos entre 3 (positivo).',math:'3x\\ge24\\quad\\Rightarrow\\quad x\\ge8',phase:1},
+{why:'El 8 sí se incluye. Representamos todos los números mayores o iguales que 8.',math:'\\boxed{CS=[8,+\\infty)}',phase:2}
+];
+function math(tex,el,display=false){if(window.katex){try{window.katex.render(tex,el,{displayMode:display,throwOnError:false,strict:'ignore'});return}catch(e){}}el.textContent=tex;}
+function createFloaters(){const f=$('floaters');for(let i=0;i<16;i++){const s=document.createElement('span');s.style.left=Math.random()*100+'%';s.style.animationDuration=(10+Math.random()*18)+'s';s.style.animationDelay=-Math.random()*20+'s';f.appendChild(s)}}
+function graph(){const marks=[0,2,4,6,8,10,12,14,16],x=v=>100+v*48;const y=215;let svg=`<svg viewBox="0 0 1050 420" role="img" aria-label="Recta numérica: solución desde 8 incluido hasta infinito positivo"><defs><linearGradient id="ray" x1="0" x2="1"><stop offset="0" stop-color="#facc15"/><stop offset="1" stop-color="#fde047"/></linearGradient></defs><text x="525" y="76" font-size="27" text-anchor="middle" font-weight="900" fill="#4338ca">${revealed<4?'Identifiquemos el valor crítico':revealed===4?'Punto crítico: 8':'CONJUNTO SOLUCIÓN'}</text><line x1="74" y1="${y}" x2="965" y2="${y}" stroke="#e11d48" stroke-width="9" stroke-linecap="round"/><path d="M 64 ${y} L 89 ${y-15} L 89 ${y+15} Z M 985 ${y} L 960 ${y-15} L 960 ${y+15} Z" fill="#e11d48"/>`;
+for(const m of marks){const z=x(m);svg+=`<line x1="${z}" y1="${y-16}" x2="${z}" y2="${y+16}" stroke="#334155" stroke-width="3"/><text x="${z}" y="${y+55}" text-anchor="middle" font-weight="900" font-size="26" fill="${m===8?'#6d28d9':'#334155'}">${m}</text>`}
+svg+=`<text x="51" y="${y+55}" fill="#334155" font-size="22" font-weight="800">−∞</text><text x="942" y="${y+55}" fill="#334155" font-size="22" font-weight="800">+∞</text>`;
+if(revealed>=4){const z=x(8);svg+=`<line x1="${z}" x2="${z}" y1="94" y2="318" stroke="#f97316" stroke-width="4" stroke-dasharray="10 8" class="guideReveal"/>`;
+if(revealed===4)svg+=`<circle cx="${z}" cy="${y}" r="14" fill="#ffffff" stroke="#7c3aed" stroke-width="5" class="guideReveal"/><text x="${z}" y="120" text-anchor="middle" fill="#7c3aed" font-size="25" font-weight="900">x ≥ 8</text>`;
+else svg+=`<rect x="${z}" y="${y-20}" width="${962-z}" height="40" rx="20" fill="url(#ray)" stroke="#ca8a04" stroke-width="3" class="bandReveal"/><path d="M 972 ${y} l -27 -19 v 38 Z" fill="#facc15" class="bandReveal"/><circle cx="${z}" cy="${y}" r="17" fill="#facc15" stroke="#854d0e" stroke-width="5" class="guideReveal"/><text x="${z+140}" y="${y-54}" fill="#92400e" font-size="30" font-weight="900">x ≥ 8</text><text x="${z+150}" y="${y+105}" fill="#166534" font-size="25" font-weight="900">8 está incluido ✓</text>`;}
+svg+=`<style>.bandReveal{transform-box:fill-box;transform-origin:left center;animation:grow .75s ease-out both}@keyframes grow{from{opacity:.15;transform:scaleX(.05)}to{opacity:1;transform:scaleX(1)}}.guideReveal{animation:appear .4s ease-out}@keyframes appear{from{opacity:0}to{opacity:1}}</style></svg>`;return svg;}
+function render(){math('\\frac{x}{4}+\\frac{x}{2}\\ge 6',$('enunciadoEq'),true);const area=$('stepsArea');area.innerHTML='';if(!revealed){area.innerHTML='<div class="emptyBox"><div><strong>¿Cómo empezamos?</strong><p>Presiona <b>Siguiente paso</b> para hallar el m.c.m. de 4 y 2.</p><p>La solución se resaltará en amarillo al finalizar.</p></div></div>'}else{STEPS.slice(0,revealed).forEach((s,i)=>{const d=document.createElement('div');d.className='step'+(i===revealed-1?' current':'');d.innerHTML=`<div class="stepWhy"><b>${i+1}</b><span>${s.why}</span></div><div class="mathLine"></div>`;area.appendChild(d);math(s.math,d.querySelector('.mathLine'),true)});if(revealed===5){const d=document.createElement('div');d.className='notice';d.textContent='✓ Solución: todos los números reales desde 8, incluido, hacia la derecha.';area.appendChild(d)}area.scrollTop=area.scrollHeight} $('graphBox').innerHTML=graph();$('stepMeta').textContent=`${revealed} de 5 pasos`;$('progressTxt').textContent=`${revealed} / 5`;$('progressBar').style.width=(revealed*20)+'%';$('nextStep').disabled=revealed===5;$('prevStep').disabled=revealed===0;$('graphTitle').textContent=revealed===5?'La franja amarilla representa el conjunto solución.':revealed===4?'Marcamos el valor crítico 8; falta representar la región solución.':'La recta numérica se completa conforme avanzas.';$('graphTip').textContent=revealed===5?'El punto lleno indica que 8 está incluido (≥). La franja amarilla se extiende hacia +∞.':revealed===4?'Como x ≥ 8, partiremos de 8 con punto lleno y avanzaremos a la derecha.':'Primero resuelve la inequación; al final aparecerá la franja amarilla del conjunto solución.';}
+$('nextStep').onclick=()=>{revealed=Math.min(5,revealed+1);render()};$('prevStep').onclick=()=>{revealed=Math.max(0,revealed-1);render()};$('solveAll').onclick=()=>{revealed=5;render()};$('restart').onclick=()=>{revealed=0;render()};
+// Sonidos breves de interacción generados con Web Audio (sin archivos externos).
+let soundEnabled=true, audioContext=null;
+function playSound(kind='click'){
+  if(!soundEnabled) return;
+  try {
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx) return;
+    if(!audioContext) audioContext=new AudioCtx();
+    if(audioContext.state==='suspended') audioContext.resume().catch(()=>{});
+    const now=audioContext.currentTime;
+    const notes=kind==='success'?[660,830,1046]:kind==='step'?[520,710]:kind==='draw'?[360]:[440,600];
+    notes.forEach((freq,i)=>{
+      const o=audioContext.createOscillator(), gain=audioContext.createGain();
+      const start=now+i*.055, end=start+(kind==='draw'?.065:.115);
+      o.type='sine'; o.frequency.setValueAtTime(freq,start);
+      gain.gain.setValueAtTime(.0001,start);
+      gain.gain.exponentialRampToValueAtTime(kind==='draw'?.018:.075,start+.013);
+      gain.gain.exponentialRampToValueAtTime(.0001,end);
+      o.connect(gain);gain.connect(audioContext.destination);o.start(start);o.stop(end+.01);
+    });
+  }catch(e){}
+}
+function syncSound(){ const txt=soundEnabled?'🔊 Sonido':'🔇 Silencio'; $('toggleMute').textContent=txt;  }
+function toggleSound(){soundEnabled=!soundEnabled;syncSound();if(soundEnabled)playSound('success');}
+$('toggleMute').onclick=toggleSound;
+document.addEventListener('click',ev=>{
+  if(ev.target.closest('#toggleMute'))return;
+  if(ev.target.closest('button,select')){
+    if(ev.target.closest('#solveAll')) playSound('success');
+    else if(ev.target.closest('#nextStep,#prevStep')) playSound('step');
+    else playSound('click');
+  }
+},true);
+document.addEventListener('change',ev=>{if(ev.target.matches('select'))playSound('click')},true);
+// Pizarra activa
+const ink=$('ink'), ctx=ink.getContext('2d');
+let tool='select', color='#ef4444', down=false, last=null, origin=null, snapshot=null, straightMode=false, undo=[];
+function resizeInk(){
+ const old=document.createElement('canvas'); old.width=ink.width; old.height=ink.height;
+ if(old.width&&old.height)old.getContext('2d').drawImage(ink,0,0);
+ ink.width=innerWidth*devicePixelRatio;ink.height=innerHeight*devicePixelRatio;
+ ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+ if(old.width&&old.height)ctx.drawImage(old,0,0,old.width/devicePixelRatio,old.height/devicePixelRatio);
+}
+addEventListener('resize',resizeInk);resizeInk();
+function saveInk(){undo.push(ctx.getImageData(0,0,ink.width,ink.height));if(undo.length>14)undo.shift()}
+function setTool(t){tool=t;document.body.classList.toggle('drawactive',t!=='select');document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===t))}
+document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
+document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{color=b.dataset.color;document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('sel',x===b))});
+$('clearInk').onclick=()=>{saveInk();ctx.clearRect(0,0,innerWidth,innerHeight)};
+$('undoInk').onclick=()=>{if(undo.length)ctx.putImageData(undo.pop(),0,0)};
+function point(ev){return {x:ev.clientX,y:ev.clientY}}
+function strokeSegment(from,to,style){
+ ctx.lineCap='round';ctx.lineJoin='round';
+ ctx.lineWidth=style==='erase'?34:style==='marker'?20:4.8;
+ ctx.globalAlpha=style==='marker'?.3:1;
+ ctx.globalCompositeOperation=style==='erase'?'destination-out':'source-over';
+ ctx.strokeStyle=color;ctx.beginPath();ctx.moveTo(from.x,from.y);ctx.lineTo(to.x,to.y);ctx.stroke();
+ ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+}
+ink.addEventListener('pointerdown',ev=>{
+ if(tool==='select'||(ev.pointerType==='mouse'&&ev.button!==0))return;
+ ev.preventDefault();saveInk();down=true;origin=last=point(ev);
+ straightMode=tool==='line'||(tool==='pen'&&ev.shiftKey);
+ snapshot=(tool==='line'||tool==='pen')?ctx.getImageData(0,0,ink.width,ink.height):null;
+ ink.setPointerCapture(ev.pointerId);playSound('draw');
+ if(tool==='pen'&&!straightMode){ctx.fillStyle=color;ctx.beginPath();ctx.arc(origin.x,origin.y,2.5,0,Math.PI*2);ctx.fill()}
+});
+ink.addEventListener('pointermove',ev=>{
+ if(!down)return;ev.preventDefault();
+ const p=point(ev);
+ // Shift transforma el lápiz en regla: línea desde el punto inicial, con vista previa.
+ if(tool==='pen'&&ev.shiftKey)straightMode=true;
+ if(straightMode&&snapshot){ctx.putImageData(snapshot,0,0);strokeSegment(origin,p,tool);}
+ else {strokeSegment(last,p,tool);last=p;}
+});
+function stopInk(ev){
+ if(!down)return;
+ if(straightMode&&snapshot){
+   ctx.putImageData(snapshot,0,0);
+   strokeSegment(origin,point(ev),tool);
+ }
+ down=false;straightMode=false;snapshot=null;
+ if(ink.hasPointerCapture(ev.pointerId))ink.releasePointerCapture(ev.pointerId);
+}
+ink.addEventListener('pointerup',stopInk);ink.addEventListener('pointercancel',stopInk);
+addEventListener('keydown', ev=>{ if(ev.key==='Escape') setTool('select'); if((ev.ctrlKey||ev.metaKey)&&ev.key.toLowerCase()==='z'){ ev.preventDefault(); $('undoInk').click(); } if(tool==='select'&&ev.key==='ArrowRight') $('nextStep').click(); if(tool==='select'&&ev.key==='ArrowLeft') $('prevStep').click(); });
+
+function init(){createFloaters();setTool('select');syncSound();render();}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script></body></html>
